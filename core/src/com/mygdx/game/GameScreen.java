@@ -27,7 +27,6 @@ public class GameScreen implements Screen
 		game.MakeWall(MyGdxGame.WIDTH/2, MyGdxGame.HEIGHT - 5, MyGdxGame.WIDTH, 10);
 		game.MakeWall(5, MyGdxGame.HEIGHT/2,                   10, MyGdxGame.HEIGHT);
 		game.MakeWall(MyGdxGame.WIDTH - 5, MyGdxGame.HEIGHT/2, 10, MyGdxGame.HEIGHT);
-		game.MakeParticle(100, 300);
 		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
@@ -38,8 +37,7 @@ public class GameScreen implements Screen
 	        	game.MakeParticle(touchPos.x, touchPos.y);
 				return true;
 			}
-		});
-		
+		});		
 	}
 	
 	@Override
