@@ -7,71 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen 
 {
-	public class Particle
-	{
-		private static final float mRadius = 6f;
-		private final Body mCollisionBody;
-		
-		public Particle(World world, float x, float y)
-		{
-			mCollisionBody = makeCollisionBody(world, x, y);
-		}
-		
-		public void render(ShapeRenderer sr)
-		{
-			Vector2 position = mCollisionBody.getWorldCenter();
-			
-			sr.setColor(1, 0, 0, 1);
-			sr.circle(position.x, position.y, mRadius);
-		}
-		
-		private Body makeCollisionBody(World world, float x, float y)
-		{
-			// First we create a body definition
-			BodyDef bodyDef = new BodyDef();
-			bodyDef.type = BodyType.DynamicBody;
-			bodyDef.position.set(x, y);
-		
-			// Create our body in the world using our body definition
-			Body body = world.createBody(bodyDef);
-			body.applyLinearImpulse(30, -30, 0, 0, true);
-		
-			// Create a circle shape and set its radius to 6
-			CircleShape circle = new CircleShape();
-			circle.setRadius(mRadius);
-		
-			// Create a fixture definition to apply our shape to
-			FixtureDef fixtureDef = new FixtureDef();
-			fixtureDef.shape = circle;
-			fixtureDef.density = 0.5f; 
-			fixtureDef.friction = 0f;
-			fixtureDef.restitution = 1f; // Completely elastic
-		
-			// Create our fixture and attach it to the body
-			body.createFixture(fixtureDef);
-		
-			// Remember to dispose of any shapes after you're done with them!
-			// BodyDef and FixtureDef don't need disposing, but shapes do.
-			circle.dispose();
-			
-			return body;
-		}
-	}
-	
-	
 	final MyGdxGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
 
@@ -80,7 +21,7 @@ public class GameScreen implements Screen
 	
 	private final Vector3 touchPos = new Vector3();
 	
-	private Array<Particle> mParticles = new Array<GameScreen.Particle>(false, 300);
+	private Array<Particle> mParticles = new Array<Particle>(false, 300);
 	
 	
 	public GameScreen(final MyGdxGame g)
@@ -107,6 +48,28 @@ public class GameScreen implements Screen
 		});		
 	}
 	
+	private void updateParticleSpeedRange()
+	{
+		if (mParticles.size == 0)
+			return;
+		
+		float sMin = mParticles.first().getSpeed();
+		float sMax = sMin;
+		
+        for (Particle p : mParticles) 
+        {
+        	float s = p.getSpeed();
+        	if (s < sMin)
+        		sMin = s;
+        	else if (s > sMax)
+        		sMax = s;        			
+		}
+        
+        Particle.mMinSpeed = sMin;
+        Particle.mMaxSpeed = sMax;
+		
+	}
+	
 	@Override
 	public void render(float delta) 
 	{
@@ -115,6 +78,8 @@ public class GameScreen implements Screen
 
         camera.update();        
         //debugRenderer.render(game.world, camera.combined);
+        
+        updateParticleSpeedRange();
         
         mShapeRenderer.begin(ShapeType.Filled);
         for (Particle p : mParticles) 
