@@ -17,9 +17,6 @@ public class Particle
 	private static final BodyDef bodyDef = makeBodyDef();
 	private static final FixtureDef fixtureDef = makeFixtureDef();
 
-	static float mMinSpeed = 0;
-	static float mMaxSpeed = 100;
-	
 	private final Body mCollisionBody;		
 	private Color mColor = new Color();
 
@@ -30,23 +27,23 @@ public class Particle
 		mCollisionBody.applyLinearImpulse(3000, -3000, 0, 0, true);
 	}
 	
-	public void render(ShapeRenderer sr)
+	public void render(ShapeRenderer sr, float minSpeed, float maxSpeed)
 	{
-		updateColor();	
+		updateColor(minSpeed, maxSpeed);	
 		sr.setColor(mColor);
 		
 		Vector2 position = mCollisionBody.getWorldCenter();
 		sr.circle(position.x, position.y, mRadius);
 	}
 	
-	protected void updateColor()
+	protected void updateColor(float minSpeed, float maxSpeed)
 	{
 		float interp = 0.5f;
 		
-		float speedInterval = mMaxSpeed - mMinSpeed;
+		float speedInterval = maxSpeed - minSpeed;
 		if (speedInterval > 0)
 		{
-			interp = (getSpeed() - mMinSpeed)/speedInterval;
+			interp = (getSpeed() - minSpeed)/speedInterval;
 		}
 		
 		mColor.set(Color.BLUE);

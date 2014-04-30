@@ -11,6 +11,9 @@ public class Gas
 	private final World mWorld;
 	private final Array<Particle> mParticles = new Array<Particle>(false, 300);
 	
+	float mMinSpeed = 0;
+	float mMaxSpeed = 100;
+
 	
 	public Gas(World world)
 	{
@@ -40,9 +43,8 @@ public class Gas
         		sMax = s;        			
 		}
         
-        Particle.mMinSpeed = sMin;
-        Particle.mMaxSpeed = sMax;
-		
+        mMinSpeed = sMin;
+        mMaxSpeed = sMax;
 	}
 
 	public void render(ShapeRenderer shapeRenderer)
@@ -52,11 +54,9 @@ public class Gas
         shapeRenderer.begin(ShapeType.Filled);
         for (Particle p : mParticles) 
         {
-        	p.render(shapeRenderer);
+        	p.render(shapeRenderer, mMinSpeed, mMaxSpeed);
 		}
         shapeRenderer.end();
 	}
-
-
 
 }
