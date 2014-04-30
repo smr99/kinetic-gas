@@ -1,7 +1,7 @@
 package ca.sumost.kinetic.android;
 
 import android.os.Bundle;
-import ca.sumost.kinetic.KineticGas;
+import ca.sumost.kinetic.KineticTheoryGame;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -13,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
 		config.useCompass = false;
-		initialize(new KineticGas(), config);
+		initialize(new KineticTheoryGame(), config);
 	}
 }

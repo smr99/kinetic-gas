@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class KineticGas extends Game
+public class KineticTheoryGame extends Game
 {
 	static public final int WIDTH = 800;
 	static public final int HEIGHT = 480;

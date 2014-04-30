@@ -14,15 +14,20 @@ public class Particle
 {
 	private static final float mRadius = 6f;
 
+	private static final BodyDef bodyDef = makeBodyDef();
+	private static final FixtureDef fixtureDef = makeFixtureDef();
+
 	static float mMinSpeed = 0;
 	static float mMaxSpeed = 100;
 	
 	private final Body mCollisionBody;		
 	private Color mColor = new Color();
+
 	
 	public Particle(World world, float x, float y)
 	{
 		mCollisionBody = makeCollisionBody(world, x, y);
+		mCollisionBody.applyLinearImpulse(3000, -3000, 0, 0, true);
 	}
 	
 	public void render(ShapeRenderer sr)
@@ -55,15 +60,22 @@ public class Particle
 	
 	private Body makeCollisionBody(World world, float x, float y)
 	{
-		// First we create a body definition
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(x, y);
 	
-		// Create our body in the world using our body definition
 		Body body = world.createBody(bodyDef);
-		body.applyLinearImpulse(30, -30, 0, 0, true);
-	
+		body.createFixture(fixtureDef);
+		return body;
+	}
+
+	private static BodyDef makeBodyDef() 
+	{
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		return bodyDef;
+	}
+
+	private static FixtureDef makeFixtureDef() 
+	{
 		// Create a circle shape and set its radius to 6
 		CircleShape circle = new CircleShape();
 		circle.setRadius(mRadius);
@@ -74,14 +86,6 @@ public class Particle
 		fixtureDef.density = 0.5f; 
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 1f; // Completely elastic
-	
-		// Create our fixture and attach it to the body
-		body.createFixture(fixtureDef);
-	
-		// Remember to dispose of any shapes after you're done with them!
-		// BodyDef and FixtureDef don't need disposing, but shapes do.
-		circle.dispose();
-		
-		return body;
+		return fixtureDef;
 	}
 }

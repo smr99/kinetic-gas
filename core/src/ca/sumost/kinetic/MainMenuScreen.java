@@ -7,16 +7,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MainMenuScreen implements Screen 
 {
-	private final KineticGas game;
+	private final KineticTheoryGame game;
 		
 	OrthographicCamera camera;
 		
-	public MainMenuScreen(final KineticGas passed_game) 
+	public MainMenuScreen(final KineticTheoryGame passed_game) 
 	{
 		game = passed_game;	
 			
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, KineticGas.WIDTH, KineticGas.HEIGHT);
+		camera.setToOrtho(false, KineticTheoryGame.WIDTH, KineticTheoryGame.HEIGHT);
 	}
 		
 	@Override

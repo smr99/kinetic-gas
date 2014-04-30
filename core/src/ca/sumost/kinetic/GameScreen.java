@@ -6,34 +6,30 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen 
 {
-	final KineticGas game;
+	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
-
-	//private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer;
-	
 	private final Vector3 touchPos = new Vector3();
 	
-	private Array<Particle> mParticles = new Array<Particle>(false, 300);
+	private final Gas mGas;
 	
 	
-	public GameScreen(final KineticGas g)
+	public GameScreen(final KineticTheoryGame g)
 	{
 		game = g;
 		mShapeRenderer = new ShapeRenderer();
+		mGas = new Gas(game.world);
 		
-		camera.setToOrtho(false, KineticGas.WIDTH, KineticGas.HEIGHT);
+		camera.setToOrtho(false, KineticTheoryGame.WIDTH, KineticTheoryGame.HEIGHT);
 		
-		game.MakeWall(KineticGas.WIDTH/2, 5, KineticGas.WIDTH,                    10);
-		game.MakeWall(KineticGas.WIDTH/2, KineticGas.HEIGHT - 5, KineticGas.WIDTH, 10);
-		game.MakeWall(5, KineticGas.HEIGHT/2,                   10, KineticGas.HEIGHT);
-		game.MakeWall(KineticGas.WIDTH - 5, KineticGas.HEIGHT/2, 10, KineticGas.HEIGHT);
+		game.MakeWall(KineticTheoryGame.WIDTH/2, 5, KineticTheoryGame.WIDTH,                    10);
+		game.MakeWall(KineticTheoryGame.WIDTH/2, KineticTheoryGame.HEIGHT - 5, KineticTheoryGame.WIDTH, 10);
+		game.MakeWall(5, KineticTheoryGame.HEIGHT/2,                   10, KineticTheoryGame.HEIGHT);
+		game.MakeWall(KineticTheoryGame.WIDTH - 5, KineticTheoryGame.HEIGHT/2, 10, KineticTheoryGame.HEIGHT);
 		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
@@ -41,32 +37,10 @@ public class GameScreen implements Screen
 			{
 				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 	        	camera.unproject(touchPos);
-	        	mParticles.add(new Particle(game.world, touchPos.x, touchPos.y));
+	        	mGas.makeParticle(touchPos);
 				return true;
 			}
 		});		
-	}
-	
-	private void updateParticleSpeedRange()
-	{
-		if (mParticles.size == 0)
-			return;
-		
-		float sMin = mParticles.first().getSpeed();
-		float sMax = sMin;
-		
-        for (Particle p : mParticles) 
-        {
-        	float s = p.getSpeed();
-        	if (s < sMin)
-        		sMin = s;
-        	else if (s > sMax)
-        		sMax = s;        			
-		}
-        
-        Particle.mMinSpeed = sMin;
-        Particle.mMaxSpeed = sMax;
-		
 	}
 	
 	@Override
@@ -75,17 +49,10 @@ public class GameScreen implements Screen
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();        
-        //debugRenderer.render(game.world, camera.combined);
+        camera.update();
+        mShapeRenderer.setProjectionMatrix(camera.combined);
         
-        updateParticleSpeedRange();
-        
-        mShapeRenderer.begin(ShapeType.Filled);
-        for (Particle p : mParticles) 
-        {
-        	p.render(mShapeRenderer);
-		}
-        mShapeRenderer.end();
+        mGas.render(mShapeRenderer);
         
 		game.world.step(1/60f, 6, 2);
 	}
