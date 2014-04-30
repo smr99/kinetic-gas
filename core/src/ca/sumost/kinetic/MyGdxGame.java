@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package ca.sumost.kinetic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package ca.sumost.kinetic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen 
@@ -16,7 +15,7 @@ public class GameScreen implements Screen
 	final MyGdxGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
 
-	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+	//private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer;
 	
 	private final Vector3 touchPos = new Vector3();
