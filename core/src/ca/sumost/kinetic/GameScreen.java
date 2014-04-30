@@ -1,5 +1,7 @@
 package ca.sumost.kinetic;
 
+import java.util.Formatter;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 
+@SuppressWarnings("unused")
 public class GameScreen implements Screen 
 {
 	private final KineticTheoryGame game;
@@ -16,8 +19,8 @@ public class GameScreen implements Screen
 	private final Vector3 touchPos = new Vector3();
 	
 	private final Gas mGas;
-	
-	
+
+
 	public GameScreen(final KineticTheoryGame g)
 	{
 		game = g;
@@ -53,6 +56,18 @@ public class GameScreen implements Screen
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
         mGas.render(mShapeRenderer);
+        
+		game.batch.begin();
+		if (mGas.speedStats.count > 0)
+		{
+			CharSequence msg = String.format("Speed: %.1f/%.1f/%.1f", mGas.speedStats.min, mGas.speedStats.mean(), mGas.speedStats.max);
+			game.font.draw(game.batch, msg, 100, 100);
+			msg = String.format("Vx: %.1f/%.1f/%.1f", mGas.vxStats.min, mGas.vxStats.mean(), mGas.vxStats.max);
+			game.font.draw(game.batch, msg, 100, 80);
+			msg = String.format("Vy: %.1f/%.1f/%.1f", mGas.vyStats.min, mGas.vyStats.mean(), mGas.vyStats.max);
+			game.font.draw(game.batch, msg, 100, 60);
+		}
+		game.batch.end();
         
 		game.world.step(1/60f, 6, 2);
 	}

@@ -50,6 +50,11 @@ public class Particle
 		mColor.lerp(Color.RED, interp);
 	}
 
+	public Vector2 getVelocity()
+	{
+		return mCollisionBody.getLinearVelocity();
+	}
+	
 	public float getSpeed() 
 	{
 		return mCollisionBody.getLinearVelocity().len();

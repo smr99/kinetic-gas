@@ -1,7 +1,10 @@
 package ca.sumost.kinetic;
 
+import ca.sumost.math.DescriptiveStatistics;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -11,10 +14,11 @@ public class Gas
 	private final World mWorld;
 	private final Array<Particle> mParticles = new Array<Particle>(false, 300);
 	
-	float mMinSpeed = 0;
-	float mMaxSpeed = 100;
-
+	public final DescriptiveStatistics vxStats = new DescriptiveStatistics();
+	public final DescriptiveStatistics vyStats = new DescriptiveStatistics();
+	public final DescriptiveStatistics speedStats = new DescriptiveStatistics();
 	
+
 	public Gas(World world)
 	{
 		mWorld = world;
@@ -26,35 +30,29 @@ public class Gas
     	mParticles.add(new Particle(mWorld, touchPos.x, touchPos.y));		
 	}
 
-	private void updateParticleSpeedRange()
+	private void updateParticleStatistics()
 	{
-		if (mParticles.size == 0)
-			return;
-		
-		float sMin = mParticles.first().getSpeed();
-		float sMax = sMin;
+		vxStats.clear();
+		vyStats.clear();
+		speedStats.clear();
 		
         for (Particle p : mParticles) 
         {
-        	float s = p.getSpeed();
-        	if (s < sMin)
-        		sMin = s;
-        	else if (s > sMax)
-        		sMax = s;        			
+        	Vector2 v = p.getVelocity();
+        	vxStats.add(v.x);
+        	vyStats.add(v.y);
+        	speedStats.add(v.len());
 		}
-        
-        mMinSpeed = sMin;
-        mMaxSpeed = sMax;
 	}
 
 	public void render(ShapeRenderer shapeRenderer)
 	{
-		updateParticleSpeedRange();
+		updateParticleStatistics();
 		
         shapeRenderer.begin(ShapeType.Filled);
         for (Particle p : mParticles) 
         {
-        	p.render(shapeRenderer, mMinSpeed, mMaxSpeed);
+        	p.render(shapeRenderer, speedStats.min, speedStats.max);
 		}
         shapeRenderer.end();
 	}
