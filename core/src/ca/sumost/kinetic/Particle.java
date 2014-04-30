@@ -14,25 +14,11 @@ public class Particle
 {
 	private static final float mRadius = 6f;
 
-	public static class GreenParticle extends Particle
-	{
-		public GreenParticle(World world, float x, float y) 
-		{
-			super(world, x, y);
-		}
-
-		protected void updateColor()
-		{
-			mColor = Color.BLUE;
-		}
-	}
-	
-	
 	static float mMinSpeed = 0;
 	static float mMaxSpeed = 100;
 	
 	private final Body mCollisionBody;		
-	protected Color mColor;
+	private Color mColor = new Color();
 	
 	public Particle(World world, float x, float y)
 	{
@@ -50,16 +36,15 @@ public class Particle
 	
 	protected void updateColor()
 	{
+		float interp = 0.5f;
+		
 		float speedInterval = mMaxSpeed - mMinSpeed;
-		if (speedInterval == 0.0)
+		if (speedInterval > 0)
 		{
-			mColor = Color.RED;
-			return;
+			interp = (getSpeed() - mMinSpeed)/speedInterval;
 		}
 		
-		float interp = (getSpeed() - mMinSpeed)/speedInterval;
-		
-		mColor = new Color(Color.BLUE);
+		mColor.set(Color.BLUE);
 		mColor.lerp(Color.RED, interp);
 	}
 

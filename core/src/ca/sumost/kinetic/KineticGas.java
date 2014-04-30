@@ -20,7 +20,7 @@ public class KineticGas extends Game
 
 	public SpriteBatch batch;
 	public BitmapFont font;
-	public final World world = new World(new Vector2(0,-0), true);
+	public final World world = new World(new Vector2(0, 0), true);
 	
 	@Override
 	public void create () 
