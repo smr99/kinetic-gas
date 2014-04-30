@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen 
 {
-	final MyGdxGame game;
+	final KineticGas game;
 	private final OrthographicCamera camera = new OrthographicCamera();
 
 	//private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
@@ -23,17 +23,17 @@ public class GameScreen implements Screen
 	private Array<Particle> mParticles = new Array<Particle>(false, 300);
 	
 	
-	public GameScreen(final MyGdxGame g)
+	public GameScreen(final KineticGas g)
 	{
 		game = g;
 		mShapeRenderer = new ShapeRenderer();
 		
-		camera.setToOrtho(false, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+		camera.setToOrtho(false, KineticGas.WIDTH, KineticGas.HEIGHT);
 		
-		game.MakeWall(MyGdxGame.WIDTH/2, 5, MyGdxGame.WIDTH,                    10);
-		game.MakeWall(MyGdxGame.WIDTH/2, MyGdxGame.HEIGHT - 5, MyGdxGame.WIDTH, 10);
-		game.MakeWall(5, MyGdxGame.HEIGHT/2,                   10, MyGdxGame.HEIGHT);
-		game.MakeWall(MyGdxGame.WIDTH - 5, MyGdxGame.HEIGHT/2, 10, MyGdxGame.HEIGHT);
+		game.MakeWall(KineticGas.WIDTH/2, 5, KineticGas.WIDTH,                    10);
+		game.MakeWall(KineticGas.WIDTH/2, KineticGas.HEIGHT - 5, KineticGas.WIDTH, 10);
+		game.MakeWall(5, KineticGas.HEIGHT/2,                   10, KineticGas.HEIGHT);
+		game.MakeWall(KineticGas.WIDTH - 5, KineticGas.HEIGHT/2, 10, KineticGas.HEIGHT);
 		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
