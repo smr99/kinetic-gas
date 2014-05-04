@@ -19,6 +19,7 @@ public class GameScreen implements Screen
 	private final Vector3 touchPos = new Vector3();
 	
 	private final Gas mGas;
+	private final WallGroup mWalls;
 
 
 	public GameScreen(final KineticTheoryGame g)
@@ -26,13 +27,14 @@ public class GameScreen implements Screen
 		game = g;
 		mShapeRenderer = new ShapeRenderer();
 		mGas = new Gas(game.world);
+		mWalls = new WallGroup(game.world);
 		
 		camera.setToOrtho(false, KineticTheoryGame.WIDTH, KineticTheoryGame.HEIGHT);
 		
-		game.MakeWall(KineticTheoryGame.WIDTH/2, 5, KineticTheoryGame.WIDTH,                    10);
-		game.MakeWall(KineticTheoryGame.WIDTH/2, KineticTheoryGame.HEIGHT - 5, KineticTheoryGame.WIDTH, 10);
-		game.MakeWall(5, KineticTheoryGame.HEIGHT/2,                   10, KineticTheoryGame.HEIGHT);
-		game.MakeWall(KineticTheoryGame.WIDTH - 5, KineticTheoryGame.HEIGHT/2, 10, KineticTheoryGame.HEIGHT);
+		mWalls.Add(Wall.MakeBox(game.world, KineticTheoryGame.WIDTH/2, 5, KineticTheoryGame.WIDTH,                    10));
+		mWalls.Add(Wall.MakeBox(game.world, KineticTheoryGame.WIDTH/2, KineticTheoryGame.HEIGHT - 5, KineticTheoryGame.WIDTH, 10));
+		mWalls.Add(Wall.MakeBox(game.world, 5, KineticTheoryGame.HEIGHT/2,                   10, KineticTheoryGame.HEIGHT));
+		mWalls.Add(Wall.MakeBox(game.world, KineticTheoryGame.WIDTH - 5, KineticTheoryGame.HEIGHT/2, 10, KineticTheoryGame.HEIGHT));
 		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
@@ -56,6 +58,7 @@ public class GameScreen implements Screen
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
         mGas.render(mShapeRenderer);
+        mWalls.render(mShapeRenderer);
         
 		game.batch.begin();
 		if (mGas.speedStats.count > 0)
