@@ -24,7 +24,7 @@ public class Particle
 	public Particle(World world, float x, float y)
 	{
 		mCollisionBody = makeCollisionBody(world, x, y);
-		mCollisionBody.applyLinearImpulse(3000, -3000, 0, 0, true);
+		mCollisionBody.applyLinearImpulse(3000, -3000, x, y, true);
 	}
 	
 	public void render(ShapeRenderer sr, float minSpeed, float maxSpeed)
@@ -53,6 +53,11 @@ public class Particle
 	public Vector2 getVelocity()
 	{
 		return mCollisionBody.getLinearVelocity();
+	}
+	
+	public float getAngularVelocity()
+	{
+		return mCollisionBody.getAngularVelocity();
 	}
 	
 	public float getSpeed() 

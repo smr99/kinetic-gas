@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 @SuppressWarnings("unused")
 public class GameScreen implements Screen 
 {
 	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
+	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer;
 	private final Vector3 touchPos = new Vector3();
 	
@@ -55,6 +57,7 @@ public class GameScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+        //debugRenderer.render(game.world, camera.combined);
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
         mGas.render(mShapeRenderer);
@@ -69,6 +72,8 @@ public class GameScreen implements Screen
 			game.font.draw(game.batch, msg, 100, 80);
 			msg = String.format("Vy: %.1f/%.1f/%.1f", mGas.vyStats.min, mGas.vyStats.mean(), mGas.vyStats.max);
 			game.font.draw(game.batch, msg, 100, 60);
+			msg = String.format("Va: %.1f/%.1f/%.1f", mGas.angularSpeedStats.min, mGas.angularSpeedStats.mean(), mGas.angularSpeedStats.max);
+			game.font.draw(game.batch, msg, 100, 40);
 		}
 		game.batch.end();
         

@@ -17,6 +17,7 @@ public class Gas
 	public final DescriptiveStatistics vxStats = new DescriptiveStatistics();
 	public final DescriptiveStatistics vyStats = new DescriptiveStatistics();
 	public final DescriptiveStatistics speedStats = new DescriptiveStatistics();
+	public final DescriptiveStatistics angularSpeedStats = new DescriptiveStatistics();
 	
 
 	public Gas(World world)
@@ -35,6 +36,7 @@ public class Gas
 		vxStats.clear();
 		vyStats.clear();
 		speedStats.clear();
+		angularSpeedStats.clear();
 		
         for (Particle p : mParticles) 
         {
@@ -42,6 +44,7 @@ public class Gas
         	vxStats.add(v.x);
         	vyStats.add(v.y);
         	speedStats.add(v.len());
+        	angularSpeedStats.add(p.getAngularVelocity());
 		}
 	}
 
