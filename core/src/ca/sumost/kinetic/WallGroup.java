@@ -14,14 +14,21 @@ import com.badlogic.gdx.utils.Array;
 public class WallGroup
 {
 	private final Array<Wall> mWalls = new Array<Wall>(false, 10);
+	private final World mWorld;
 	
 	public WallGroup(World world)
 	{
+		mWorld = world;
 	}
 
 	public void Add(Wall w)
 	{
 		mWalls.add(w);
+	}
+	
+	public void AddBox(float cx, float cy, float hx, float hy)
+	{
+		Add(Wall.MakeBox(mWorld, cx, cy, hx, hy));
 	}
 	
 	public void render(ShapeRenderer shapeRenderer)

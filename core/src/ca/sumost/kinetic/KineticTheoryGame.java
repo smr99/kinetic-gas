@@ -9,8 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class KineticTheoryGame extends Game
 {
-	static public final int WIDTH = 800;
-	static public final int HEIGHT = 480;
+	static public final int VIEWPORT_WIDTH = 2560/2;
+	static public final int VIEWPORT_HEIGHT = 1600/2;
 
 	public SpriteBatch batch;
 	public BitmapFont font;

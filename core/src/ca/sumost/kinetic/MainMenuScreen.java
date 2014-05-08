@@ -16,7 +16,7 @@ public class MainMenuScreen implements Screen
 		game = passed_game;	
 			
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, KineticTheoryGame.WIDTH, KineticTheoryGame.HEIGHT);
+		camera.setToOrtho(false, KineticTheoryGame.VIEWPORT_WIDTH, KineticTheoryGame.VIEWPORT_HEIGHT);
 	}
 		
 	@Override
