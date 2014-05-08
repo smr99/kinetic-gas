@@ -41,4 +41,14 @@ public class WallGroup
         shapeRenderer.end();
 	}
 	
+	public boolean isHit(float x, float y)
+	{
+		for (Wall w : mWalls)
+		{
+			if (w.isHit(x, y))
+				return true;
+		}
+		return false;
+	}
+	
 }

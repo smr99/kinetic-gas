@@ -1,7 +1,5 @@
 package ca.sumost.kinetic;
 
-import java.util.Formatter;
-
 import ca.sumost.math.DescriptiveStatistics;
 
 import com.badlogic.gdx.Gdx;
@@ -13,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class GameScreen implements Screen 
 {
 	static public final int WIDTH = 160;
@@ -21,6 +19,8 @@ public class GameScreen implements Screen
 
 	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
+	
+	@SuppressWarnings("unused")
 	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer;
 	private final Vector3 touchPos = new Vector3();
@@ -47,13 +47,18 @@ public class GameScreen implements Screen
 		mWalls.AddBox(wallWidth/2,         HEIGHT/2,             wallWidth, HEIGHT);
 		mWalls.AddBox(WIDTH - wallWidth/2, HEIGHT/2,             wallWidth, HEIGHT);
 		
+		mWalls.AddBox(WIDTH/2, HEIGHT/2, wallWidth, 0.3f * HEIGHT);
+		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
 			public boolean touchDown(int x, int y, int pointer, int button)
 			{
 				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 	        	camera.unproject(touchPos);
-	        	mGas.makeParticle(touchPos);
+	        	if (!mWalls.isHit(touchPos.x, touchPos.y))
+	        	{
+	        		mGas.makeParticle(touchPos);
+	        	}
 				return true;
 			}
 		});		

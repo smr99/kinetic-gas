@@ -28,6 +28,12 @@ public class Wall
 		sr.setColor(mColor);
 		sr.rect(mLowerLeftCorner.x, mLowerLeftCorner.y, mExtent.x, mExtent.y);
 	}
+	
+	public boolean isHit(float x, float y)
+	{
+		return x >= mLowerLeftCorner.x && x <= mLowerLeftCorner.x + mExtent.x
+			&& y >= mLowerLeftCorner.y && y <= mLowerLeftCorner.y + mExtent.y;
+	}
 
 	public static Wall MakeBox(World world, float cx, float cy, float hx, float hy)
 	{
