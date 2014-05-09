@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Particle
 {
-	private static final float mRadius = 2f;
+	private static final float mRadius = 1f;
 
 	private static final BodyDef bodyDef = makeBodyDef();
 	private static final FixtureDef fixtureDef = makeFixtureDef();
@@ -24,7 +24,7 @@ public class Particle
 	public Particle(World world, float x, float y)
 	{
 		mCollisionBody = makeCollisionBody(world, x, y);
-		mCollisionBody.applyLinearImpulse(100, -100, x, y, true);
+		mCollisionBody.applyLinearImpulse(10, -10, x, y, true);
 	}
 	
 	public void render(ShapeRenderer sr, float minSpeed, float maxSpeed)
@@ -50,6 +50,11 @@ public class Particle
 		mColor.lerp(Color.RED, interp);
 	}
 
+	public Vector2 getPosition()
+	{
+		return mCollisionBody.getWorldCenter();
+	}
+	
 	public Vector2 getVelocity()
 	{
 		return mCollisionBody.getLinearVelocity();

@@ -1,7 +1,6 @@
 package ca.sumost.kinetic;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -21,24 +20,31 @@ public class WallGroup
 		mWorld = world;
 	}
 
-	public void Add(Wall w)
+	public void add(Wall w)
 	{
 		mWalls.add(w);
 	}
 	
-	public void AddBox(float cx, float cy, float hx, float hy)
+	public void addBoxCentreWidth(float cx, float cy, float hx, float hy)
 	{
-		Add(Wall.MakeBox(mWorld, cx, cy, hx, hy));
+		add(Wall.MakeBox(mWorld, cx, cy, hx, hy));
 	}
 	
+	public void addBoxCorners(float px, float py, float qx, float qy)
+	{
+		float cx = (px + qx) / 2f;
+		float cy = (py + qy) / 2f;
+		float hx = Math.abs(px - qx) / 2f;
+		float hy = Math.abs(py - qy) / 2f;
+		addBoxCentreWidth(cx, cy, hx, hy);
+	}
+
 	public void render(ShapeRenderer shapeRenderer)
 	{
-        shapeRenderer.begin(ShapeType.Filled);
         for (Wall w : mWalls) 
         {
         	w.render(shapeRenderer);
 		}
-        shapeRenderer.end();
 	}
 	
 	public boolean isHit(float x, float y)

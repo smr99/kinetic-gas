@@ -13,14 +13,31 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Wall
 {
+	private final Body mBody;
 	private Color mColor;
 	private final Vector2 mLowerLeftCorner, mExtent;
 	
 	public Wall(Body body, Vector2 lowerLeftCorner, Vector2 extent)
 	{
+		mBody = body;
 		mColor = new Color(Color.WHITE);
 		mLowerLeftCorner = lowerLeftCorner;
 		mExtent = extent;
+	}
+
+	public float left() { return mLowerLeftCorner.x; }
+	public float bottom() { return mLowerLeftCorner.y; }
+	public float right() { return mLowerLeftCorner.x + mExtent.x; }
+	public float top() { return mLowerLeftCorner.y + mExtent.y; }
+	
+	public boolean isActive()
+	{
+		return mBody.isActive();
+	}
+	
+	public void setActive(boolean isActive)
+	{
+		mBody.setActive(isActive);
 	}
 	
 	public void render(ShapeRenderer sr)

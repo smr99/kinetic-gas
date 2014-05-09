@@ -8,6 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
@@ -27,6 +29,9 @@ public class GameScreen implements Screen
 	
 	private final Gas mGas;
 	private final WallGroup mWalls;
+	private final Wall shutter;
+	
+	private final Vector2 gasPartitionTemperatures = new Vector2();
 	
 	private final DescriptiveStatistics mUpdateTimeStats = new DescriptiveStatistics();
 
@@ -40,26 +45,58 @@ public class GameScreen implements Screen
 		
 		camera.setToOrtho(false, WIDTH, HEIGHT);
 		
-		float wallWidth = 0.02f * Math.min(WIDTH,HEIGHT);
-		
-		mWalls.AddBox(WIDTH/2,             wallWidth/2,          WIDTH,     wallWidth);
-		mWalls.AddBox(WIDTH/2,             HEIGHT - wallWidth/2, WIDTH,     wallWidth);
-		mWalls.AddBox(wallWidth/2,         HEIGHT/2,             wallWidth, HEIGHT);
-		mWalls.AddBox(WIDTH - wallWidth/2, HEIGHT/2,             wallWidth, HEIGHT);
-		
-		mWalls.AddBox(WIDTH/2, HEIGHT/2, wallWidth, 0.3f * HEIGHT);
+		float wallWidth = 0.01f * Math.min(WIDTH,HEIGHT);
+	
+		mWalls.addBoxCorners(0, 0, WIDTH, wallWidth);
+		mWalls.addBoxCorners(0, HEIGHT, WIDTH, HEIGHT-wallWidth);
+		mWalls.addBoxCorners(0, wallWidth, wallWidth, HEIGHT-wallWidth);
+		mWalls.addBoxCorners(WIDTH, wallWidth, WIDTH-wallWidth, HEIGHT-wallWidth);
+
+		shutter = Wall.MakeBox(game.world, WIDTH/2f, HEIGHT/2f, wallWidth/2f, 0.2f*HEIGHT);
+		shutter.setActive(false);
+		mWalls.addBoxCorners(shutter.left(), wallWidth, shutter.right(), 0.4f*HEIGHT);
+		mWalls.addBoxCorners(shutter.left(), HEIGHT-wallWidth, shutter.right(), 0.6f*HEIGHT);
 		
 		Gdx.input.setInputProcessor(new InputAdapter()
 		{
 			public boolean touchDown(int x, int y, int pointer, int button)
 			{
-				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+				touchPos.set(x, y, 0);
 	        	camera.unproject(touchPos);
-	        	if (!mWalls.isHit(touchPos.x, touchPos.y))
+	        	
+	        	if (shutter.isHit(touchPos.x, touchPos.y))
+	        	{
+	        		shutter.setActive(true);
+	        	}
+	        	else if (!mWalls.isHit(touchPos.x, touchPos.y))
 	        	{
 	        		mGas.makeParticle(touchPos);
 	        	}
 				return true;
+			}
+			
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer)
+			{
+				if (!shutter.isActive())
+				{
+					touchPos.set(screenX, screenY, 0);
+		        	camera.unproject(touchPos);
+	        		mGas.makeParticle(touchPos);
+	        		return true;
+				}
+				return super.touchDragged(screenX, screenY, pointer);
+			}
+			
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button)
+			{
+				if (shutter.isActive())
+				{
+					shutter.setActive(false);
+					return true;
+				}
+				return super.touchUp(screenX, screenY, pointer, button);
 			}
 		});		
 	}
@@ -76,22 +113,23 @@ public class GameScreen implements Screen
         //debugRenderer.render(game.world, camera.combined);
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
+        mShapeRenderer.begin(ShapeType.Filled);
         mGas.render(mShapeRenderer);
         mWalls.render(mShapeRenderer);
+        if (shutter.isActive())
+        	shutter.render(mShapeRenderer);
+        mShapeRenderer.end();
+
+        mGas.getTemperatures(gasPartitionTemperatures, WIDTH/2f);
         
 		game.batch.begin();
 		if (mGas.speedStats.count > 0)
 		{
-			CharSequence msg = String.format("Speed: %.1f/%.1f/%.1f", mGas.speedStats.min, mGas.speedStats.mean(), mGas.speedStats.max);
-			game.font.draw(game.batch, msg, 100, 100);
-			msg = String.format("Vx: %.1f/%.1f/%.1f", mGas.vxStats.min, mGas.vxStats.mean(), mGas.vxStats.max);
-			game.font.draw(game.batch, msg, 100, 80);
-			msg = String.format("Vy: %.1f/%.1f/%.1f", mGas.vyStats.min, mGas.vyStats.mean(), mGas.vyStats.max);
-			game.font.draw(game.batch, msg, 100, 60);
-			msg = String.format("Va: %.1f/%.1f/%.1f", mGas.angularSpeedStats.min, mGas.angularSpeedStats.mean(), mGas.angularSpeedStats.max);
-			game.font.draw(game.batch, msg, 100, 40);
-			msg = String.format("dT: %.1f/%.1f/%.1f", mUpdateTimeStats.min, mUpdateTimeStats.mean(), mUpdateTimeStats.max);
-			game.font.draw(game.batch, msg, 100, 120);
+			CharSequence msg = String.format("T = %.1f", gasPartitionTemperatures.x);
+			game.font.draw(game.batch, msg, 20, KineticTheoryGame.VIEWPORT_HEIGHT-20);
+			
+			msg = String.format("T = %.1f", gasPartitionTemperatures.y);
+			game.font.draw(game.batch, msg, KineticTheoryGame.VIEWPORT_WIDTH-100, KineticTheoryGame.VIEWPORT_HEIGHT-20);
 		}
 		game.batch.end();
         
