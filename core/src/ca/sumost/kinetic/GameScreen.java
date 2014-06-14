@@ -30,6 +30,7 @@ public class GameScreen implements Screen
 	private final Gas mGas;
 	private final WallGroup mWalls;
 	private final Wall shutter;
+	private final Vector3 shutterCentre = new Vector3();
 	
 	private final Vector2 gasPartitionTemperatures = new Vector2();
 	
@@ -54,6 +55,8 @@ public class GameScreen implements Screen
 
 		shutter = Wall.MakeBox(game.world, WIDTH/2f, HEIGHT/2f, wallWidth/2f, 0.2f*HEIGHT);
 		shutter.setActive(false);
+		shutterCentre.set(WIDTH/2f, HEIGHT/2f, 0);
+		
 		mWalls.addBoxCorners(shutter.left(), wallWidth, shutter.right(), 0.4f*HEIGHT);
 		mWalls.addBoxCorners(shutter.left(), HEIGHT-wallWidth, shutter.right(), 0.6f*HEIGHT);
 		
@@ -64,7 +67,8 @@ public class GameScreen implements Screen
 				touchPos.set(x, y, 0);
 	        	camera.unproject(touchPos);
 	        	
-	        	if (shutter.isHit(touchPos.x, touchPos.y))
+	        	float rSq = (0.2f*HEIGHT*0.2f*HEIGHT);
+	        	if (touchPos.dst2(shutterCentre) < rSq)
 	        	{
 	        		shutter.setActive(true);
 	        	}
