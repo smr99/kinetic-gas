@@ -2,6 +2,7 @@ package ca.sumost.kinetic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Version;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,8 @@ public class KineticTheoryGame extends Game
 	@Override
 	public void create () 
 	{
+		Gdx.app.log("Startup", "libGDX version " + Version.VERSION);
+		
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		
