@@ -12,7 +12,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Particle
 {
-	private static final float mRadius = 1f;
+	private static final float RADIUS = 1f;
+	private static final float MASS = 1f;
+	private static final float SPEED = 10f;
 
 	private static final BodyDef bodyDef = makeBodyDef();
 	private static final FixtureDef fixtureDef = makeFixtureDef();
@@ -23,8 +25,12 @@ public class Particle
 	
 	public Particle(World world, float x, float y)
 	{
+		// The impulse momentum theorem states: Impulse (J) = p2 - p1
+		// Assuming p1 = 0, we set J = p2 = mass * speed.
+		float impulse = MASS * SPEED;
+		float impulseComponent = (float) (impulse / Math.sqrt(2.0));
 		mCollisionBody = makeCollisionBody(world, x, y);
-		mCollisionBody.applyLinearImpulse(10, -10, x, y, true);
+		mCollisionBody.applyLinearImpulse(impulseComponent, -impulseComponent, x, y, true);
 	}
 	
 	public void render(ShapeRenderer sr, float minSpeed, float maxSpeed)
@@ -33,7 +39,7 @@ public class Particle
 		sr.setColor(mColor);
 		
 		Vector2 position = mCollisionBody.getWorldCenter();
-		sr.circle(position.x, position.y, mRadius);
+		sr.circle(position.x, position.y, RADIUS);
 	}
 	
 	protected void updateColor(float minSpeed, float maxSpeed)
@@ -90,12 +96,14 @@ public class Particle
 	{
 		// Create a circle shape and set its radius to 6
 		CircleShape circle = new CircleShape();
-		circle.setRadius(mRadius);
+		circle.setRadius(RADIUS);
 	
+		float area_m2 = (float) (Math.PI * RADIUS * RADIUS);
+		
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;
-		fixtureDef.density = 0.5f; 
+		fixtureDef.density = MASS / area_m2; 
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 1f; // Completely elastic
 		return fixtureDef;
