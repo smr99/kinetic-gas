@@ -1,9 +1,6 @@
-package ca.sumost.kinetic.screen;
+package ca.sumost.kinetic.gas;
 
 import ca.sumost.kinetic.KineticTheoryGame;
-import ca.sumost.kinetic.gas.Gas;
-import ca.sumost.kinetic.gas.Wall;
-import ca.sumost.kinetic.gas.WallGroup;
 import ca.sumost.math.DescriptiveStatistics;
 
 import com.badlogic.gdx.Gdx;
