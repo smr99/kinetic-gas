@@ -1,4 +1,6 @@
-package ca.sumost.kinetic;
+package ca.sumost.kinetic.screen;
+
+import ca.sumost.kinetic.KineticTheoryGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

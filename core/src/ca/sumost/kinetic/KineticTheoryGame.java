@@ -1,5 +1,7 @@
 package ca.sumost.kinetic;
 
+import ca.sumost.kinetic.screen.MainMenuScreen;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Version;
