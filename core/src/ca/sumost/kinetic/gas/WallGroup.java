@@ -1,4 +1,4 @@
-package ca.sumost.kinetic;
+package ca.sumost.kinetic.gas;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;

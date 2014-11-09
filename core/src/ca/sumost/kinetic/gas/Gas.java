@@ -1,4 +1,4 @@
-package ca.sumost.kinetic;
+package ca.sumost.kinetic.gas;
 
 import ca.sumost.math.DescriptiveStatistics;
 
