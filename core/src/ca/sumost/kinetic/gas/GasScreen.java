@@ -14,8 +14,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
+
 //@SuppressWarnings("unused")
-public class GameScreen implements Screen 
+public class GasScreen implements Screen 
 {
 	static public final int WIDTH = 160;
 	static public final int HEIGHT = 100;
@@ -38,7 +39,7 @@ public class GameScreen implements Screen
 	private final DescriptiveStatistics mUpdateTimeStats = new DescriptiveStatistics();
 
 
-	public GameScreen(final KineticTheoryGame g)
+	public GasScreen(final KineticTheoryGame g)
 	{
 		game = g;
 		mShapeRenderer = new ShapeRenderer();

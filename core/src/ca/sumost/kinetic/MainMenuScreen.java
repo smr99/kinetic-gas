@@ -1,7 +1,5 @@
 package ca.sumost.kinetic;
 
-import ca.sumost.kinetic.gas.GameScreen;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,14 +9,12 @@ public class MainMenuScreen implements Screen
 {
 	private final KineticTheoryGame game;
 		
-	OrthographicCamera camera;
+	private final OrthographicCamera camera = new OrthographicCamera();
 		
 	public MainMenuScreen(final KineticTheoryGame passed_game) 
 	{
 		game = passed_game;	
-			
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, KineticTheoryGame.VIEWPORT_WIDTH, KineticTheoryGame.VIEWPORT_HEIGHT);
+		camera.setToOrtho(false);
 	}
 		
 	@Override
