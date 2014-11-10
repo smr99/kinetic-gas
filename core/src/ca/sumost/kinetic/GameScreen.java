@@ -15,10 +15,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 
-public class GameScreen implements Screen 
+public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 {
 	private final KineticTheoryGame game;
-	private final OrthographicCamera camera = new OrthographicCamera(10, 10);
+	private final OrthographicCamera camera = new OrthographicCamera();
 	
 	@SuppressWarnings("unused")
 	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
@@ -41,9 +41,24 @@ public class GameScreen implements Screen
 			}
 		};
 		
+		setCameraViewport();
 		Gdx.input.setInputProcessor(new GestureDetector(new WorldEditorListener(g.world, sc)));
 	}
 	
+	private void setCameraViewport()
+	{
+		final float smallEdgeLength = 10;
+		float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+		if (aspectRatio < 1)
+		{
+			camera.setToOrtho(false, smallEdgeLength, smallEdgeLength / aspectRatio);
+		}
+		else
+		{
+			camera.setToOrtho(false, smallEdgeLength * aspectRatio, smallEdgeLength);
+		}
+	}
+
 	@Override
 	public void render(float delta) 
 	{
@@ -78,9 +93,9 @@ public class GameScreen implements Screen
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+	public void resize(int width, int height) 
+	{
+		setCameraViewport();
 	}
 
 	@Override
