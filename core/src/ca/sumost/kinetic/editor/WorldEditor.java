@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class WorldEditor 
 {
@@ -35,6 +36,13 @@ public class WorldEditor
 	{
 		Body ball = mFactory.makeStationaryBall(centre);
 		ball.setUserData(mBallRenderer);
+	}
+
+	public void makeGround(Array<Vector2> vertices) 
+	{
+		//System.out.printf("Make Ground from %d points: ", vertices.size);
+		//System.out.printf(vertices + "\n");
+		Body chain = mFactory.makeGround(vertices);
 	}
 
 }

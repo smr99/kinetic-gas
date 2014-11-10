@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class WorldEditorListener implements GestureListener
 {
@@ -17,6 +18,7 @@ public class WorldEditorListener implements GestureListener
 	
 	private Vector2 mPointDown = null;
 	private Body mSelectedBody = null;
+	private Array<Vector2> mDragPoints = new Array<Vector2>(Vector2.class);
 	
 	
 	public WorldEditorListener(World world, ScreenConverter sc)
@@ -51,6 +53,8 @@ public class WorldEditorListener implements GestureListener
 	{
 		mPointDown = mScreenConverter.pointToWorld(x, y);
 		mSelectedBody = queryPoint(mPointDown);
+		mDragPoints.clear();
+		mDragPoints.add(mPointDown);
 		return false;
 	}
 
@@ -89,14 +93,33 @@ public class WorldEditorListener implements GestureListener
 	}
 
 	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		// TODO Auto-generated method stub
+	public boolean pan(float x, float y, float deltaX, float deltaY) 
+	{
+		if (mSelectedBody != null)
+			return false;
+		
+		appendChainVertex(x, y);
 		return false;
 	}
 
+	private void appendChainVertex(float x, float y) 
+	{
+		Vector2 vertex = mScreenConverter.pointToWorld(x, y);
+		if(vertex.dst2(mDragPoints.peek()) > 0.10)
+			mDragPoints.add(vertex);
+	}
+
 	@Override
-	public boolean panStop(float x, float y, int pointer, int button) {
-		// TODO Auto-generated method stub
+	public boolean panStop(float x, float y, int pointer, int button) 
+	{
+		if (mSelectedBody != null)
+			return false;
+		
+		appendChainVertex(x, y);
+		if (mDragPoints.size < 3)
+			return false;
+		
+		mEditor.makeGround(mDragPoints);
 		return false;
 	}
 
