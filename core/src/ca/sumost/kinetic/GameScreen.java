@@ -32,12 +32,18 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 		ScreenConverter sc = new ScreenConverter()
 		{
 			@Override
-			public Vector2 ToWorld(float xScreen, float yScreen) 
+			public Vector2 pointToWorld(float xScreen, float yScreen) 
 			{
 				Vector3 point = new Vector3();
 				point.set(xScreen, yScreen, 0);
 	        	camera.unproject(point);
 	        	return new Vector2(point.x, point.y);
+			}
+
+			@Override
+			public Vector2 vectorToWorld(float xScreen, float yScreen) 
+			{
+				return pointToWorld(xScreen, yScreen).sub(pointToWorld(0, 0));			
 			}
 		};
 		
