@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 
-public class GameScreen implements Screen // TODO: use ScreenAdapter instead
+public class GameScreen implements Screen
 {
 	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
@@ -25,6 +25,7 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 	private final ShapeRenderer mShapeRenderer = new ShapeRenderer();
 	private final WorldEditorListener mEditorListener;
 	
+	private boolean mIsActive = false;
 	
 	public GameScreen(final KineticTheoryGame g)
 	{
@@ -70,6 +71,8 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 	@Override
 	public void render(float delta) 
 	{
+        if (!mIsActive) return;
+		
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -113,33 +116,33 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 	}
 
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
+	public void show()
+	{
+		mIsActive = true;
 	}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
+	public void hide() 
+	{
+		mIsActive = false;
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
+	public void pause() 
+	{
+		mIsActive = false;
 	}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
+	public void resume()
+	{
+		mIsActive = true;
 	}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
+	public void dispose()
+	{
+		mShapeRenderer.dispose();
 	}
 
 }

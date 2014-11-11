@@ -1,11 +1,11 @@
 package ca.sumost.kinetic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class MainMenuScreen implements Screen 
+public class MainMenuScreen extends ScreenAdapter //implements Screen 
 {
 	private final KineticTheoryGame game;
 		
@@ -38,42 +38,6 @@ public class MainMenuScreen implements Screen
 			game.setScreen(new GameScreen(game));
 			dispose();
 		}
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

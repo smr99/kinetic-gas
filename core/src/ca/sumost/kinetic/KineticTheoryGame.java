@@ -32,6 +32,7 @@ public class KineticTheoryGame extends Game
 		this.setScreen(new MainMenuScreen(this));
 	}
 
+	//@Override
 	public void dispose() 
 	{
 		batch.dispose();
