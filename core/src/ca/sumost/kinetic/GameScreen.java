@@ -23,6 +23,7 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 	@SuppressWarnings("unused")
 	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer = new ShapeRenderer();
+	private final WorldEditorListener mEditorListener;
 	
 	
 	public GameScreen(final KineticTheoryGame g)
@@ -48,7 +49,8 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 		};
 		
 		setCameraViewport();
-		Gdx.input.setInputProcessor(new GestureDetector(new WorldEditorListener(g.world, sc)));
+		mEditorListener = new WorldEditorListener(g.world, sc);
+		Gdx.input.setInputProcessor(new GestureDetector(mEditorListener));
 	}
 	
 	private void setCameraViewport()
@@ -74,16 +76,19 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
         camera.update();        
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
-        //debugRenderer.render(game.world, camera.combined);
-        renderWorld();
-        
+		mShapeRenderer.begin(ShapeType.Line);
+		{
+			//debugRenderer.render(game.world, camera.combined);
+			renderWorld();
+			renderDecorations();
+		}
+        mShapeRenderer.end();
+
         game.world.step(1/60f, 6, 2);
 	}
 
 	private void renderWorld() 
 	{
-		mShapeRenderer.begin(ShapeType.Line);
-		
 		Array<Body> bodies = new Array<Body>();
         game.world.getBodies(bodies);
         for (Body body : bodies)
@@ -94,8 +99,11 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
         		((RenderableBody)ud).render(mShapeRenderer, body);
         	}
         }
-        
-        mShapeRenderer.end();
+	}
+
+	private void renderDecorations() 
+	{
+		mEditorListener.render(mShapeRenderer);
 	}
 
 	@Override
