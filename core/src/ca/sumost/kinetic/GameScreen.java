@@ -53,7 +53,7 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 	
 	private void setCameraViewport()
 	{
-		final float smallEdgeLength = 10;
+		final float smallEdgeLength = 50;
 		float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		if (aspectRatio < 1)
 		{
@@ -71,10 +71,10 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        //debugRenderer.render(game.world, camera.combined);
+        camera.update();        
         mShapeRenderer.setProjectionMatrix(camera.combined);
         
+        //debugRenderer.render(game.world, camera.combined);
         renderWorld();
         
         game.world.step(1/60f, 6, 2);
@@ -82,7 +82,7 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
 
 	private void renderWorld() 
 	{
-		mShapeRenderer.begin(ShapeType.Filled);
+		mShapeRenderer.begin(ShapeType.Line);
 		
 		Array<Body> bodies = new Array<Body>();
         game.world.getBodies(bodies);
