@@ -1,6 +1,6 @@
 package ca.sumost.kinetic.editor;
 
-import ca.sumost.kinetic.Renderable;
+import ca.sumost.kinetic.RenderableBody;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -15,7 +15,7 @@ public class WorldEditor
 {
 	private final BodyFactory mFactory;
 	
-	private final Renderable mBallRenderer = new Renderable() 
+	private final RenderableBody mBallRenderer = new RenderableBody() 
 	{
 		@Override
 		public void render(ShapeRenderer sr, Body body) 
@@ -28,7 +28,7 @@ public class WorldEditor
 		}
 	};
 	
-	private final Renderable mGroundRenderer = new Renderable() 
+	private final RenderableBody mGroundRenderer = new RenderableBody() 
 	{
 		@Override
 		public void render(ShapeRenderer sr, Body body) 

@@ -89,9 +89,9 @@ public class GameScreen implements Screen // TODO: use ScreenAdapter instead
         for (Body body : bodies)
         {
         	Object ud = body.getUserData();
-        	if (ud instanceof Renderable)
+        	if (ud instanceof RenderableBody)
         	{
-        		((Renderable)ud).render(mShapeRenderer, body);
+        		((RenderableBody)ud).render(mShapeRenderer, body);
         	}
         }
         
