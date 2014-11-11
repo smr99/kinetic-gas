@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 
-public class ObjectFactory 
+public class BodyFactory 
 {
 	private final World mWorld;
 	
@@ -21,7 +21,7 @@ public class ObjectFactory
 	private final FixtureDef mBallFixtureDef = makeBallFixtureDef();
 	
 	
-	public ObjectFactory(World world)
+	public BodyFactory(World world)
 	{
 		mWorld = world;
 	}

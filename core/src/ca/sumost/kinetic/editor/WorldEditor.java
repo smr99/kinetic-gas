@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class WorldEditor 
 {
-	private final ObjectFactory mFactory;
+	private final BodyFactory mFactory;
 	
 	private final Renderable mBallRenderer = new Renderable() 
 	{
@@ -29,7 +29,7 @@ public class WorldEditor
 	
 	public WorldEditor(World world)
 	{
-		mFactory = new ObjectFactory(world);
+		mFactory = new BodyFactory(world);
 	}
 	
 	public void makeBall(Vector2 centre)
