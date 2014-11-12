@@ -3,6 +3,9 @@ package ca.sumost.kinetic;
 import ca.sumost.kinetic.editor.WorldEditorListener;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,7 +22,12 @@ public class GameScreen implements Screen
 {
 	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
+
+	//@ World-unit length assigned to smaller edge of screen is this value multiplied by the zoom factor.
+	private static final float mSmallEdgeLength = 50;
 	
+	private float mZoomFactor = 1;
+
 	@SuppressWarnings("unused")
 	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 	private final ShapeRenderer mShapeRenderer = new ShapeRenderer();
@@ -31,7 +39,7 @@ public class GameScreen implements Screen
 	{
 		game = g;
 		
-		ScreenConverter sc = new ScreenConverter()
+		final ScreenConverter sc = new ScreenConverter()
 		{
 			@Override
 			public Vector2 pointToWorld(float xScreen, float yScreen) 
@@ -47,16 +55,40 @@ public class GameScreen implements Screen
 			{
 				return pointToWorld(xScreen, yScreen).sub(pointToWorld(0, 0));			
 			}
+
+			@Override
+			public void setZoom(float zoomFactor)
+			{
+				mZoomFactor = zoomFactor;
+				setCameraViewport();
+			}
 		};
 		
 		setCameraViewport();
 		mEditorListener = new WorldEditorListener(g.world, sc);
-		Gdx.input.setInputProcessor(new GestureDetector(mEditorListener));
+		
+		InputProcessor blah = new InputAdapter()
+		{
+			@Override
+			public boolean scrolled(int amount) 
+			{
+				float zoomChangeFactor = 0.90f;
+				float zoomChange = (amount > 0) ? zoomChangeFactor : 1.0f / zoomChangeFactor;
+				sc.setZoom(mZoomFactor * zoomChange);
+				return true;
+			}
+		};
+		
+		InputMultiplexer im = new InputMultiplexer();
+		im.addProcessor(new GestureDetector(mEditorListener));
+		im.addProcessor(blah);
+		
+		Gdx.input.setInputProcessor(im);
 	}
 	
 	private void setCameraViewport()
 	{
-		final float smallEdgeLength = 50;
+		float smallEdgeLength = mSmallEdgeLength * mZoomFactor;
 		float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		if (aspectRatio < 1)
 		{

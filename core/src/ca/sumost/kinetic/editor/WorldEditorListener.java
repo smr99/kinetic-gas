@@ -3,6 +3,7 @@ package ca.sumost.kinetic.editor;
 import ca.sumost.kinetic.RenderableDecoration;
 import ca.sumost.kinetic.ScreenConverter;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
@@ -192,15 +193,16 @@ public class WorldEditorListener implements GestureListener, RenderableDecoratio
 	}
 
 	@Override
-	public boolean zoom(float initialDistance, float distance) {
-		// TODO Auto-generated method stub
+	public boolean zoom(float initialDistance, float distance) 
+	{
+		Gdx.app.log("zoom", "zoom() called with initialDistance = " + initialDistance + ", distance = " + distance);
 		return false;
 	}
 
 	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
-			Vector2 pointer1, Vector2 pointer2) {
-		// TODO Auto-generated method stub
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2)
+	{
+		Gdx.app.log("zoom", "pinch() called with vectors: " + initialPointer1 + ", " + initialPointer2 + ", " + pointer1 + ", " + pointer2);
 		return false;
 	}
 
