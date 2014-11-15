@@ -8,6 +8,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +22,11 @@ public class GasScreen implements Screen
 {
 	static public final int WIDTH = 160;
 	static public final int HEIGHT = 100;
+	
+	// TODO: replace batch, font with ui and skin code
+	private SpriteBatch batch;
+	private BitmapFont font;
+	
 
 	private final KineticTheoryGame game;
 	private final OrthographicCamera camera = new OrthographicCamera();
@@ -41,6 +48,9 @@ public class GasScreen implements Screen
 
 	public GasScreen(final KineticTheoryGame g)
 	{
+		batch = new SpriteBatch();
+		font = new BitmapFont();
+
 		game = g;
 		mShapeRenderer = new ShapeRenderer();
 		mGas = new Gas(game.getWorld());
@@ -128,16 +138,16 @@ public class GasScreen implements Screen
 
         mGas.getTemperatures(gasPartitionTemperatures, WIDTH/2f);
         
-		game.batch.begin();
+		batch.begin();
 		if (mGas.speedStats.count > 0)
 		{
 			CharSequence msg = String.format("T = %.1f", gasPartitionTemperatures.x);
-			game.font.draw(game.batch, msg, 20, KineticTheoryGame.VIEWPORT_HEIGHT-20);
+			font.draw(batch, msg, 20, KineticTheoryGame.VIEWPORT_HEIGHT-20);
 			
 			msg = String.format("T = %.1f", gasPartitionTemperatures.y);
-			game.font.draw(game.batch, msg, KineticTheoryGame.VIEWPORT_WIDTH-100, KineticTheoryGame.VIEWPORT_HEIGHT-20);
+			font.draw(batch, msg, KineticTheoryGame.VIEWPORT_WIDTH-100, KineticTheoryGame.VIEWPORT_HEIGHT-20);
 		}
-		game.batch.end();
+		batch.end();
         
 		game.getWorld().step(1/60f, 6, 2);
 	}
@@ -173,9 +183,10 @@ public class GasScreen implements Screen
 	}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
+	public void dispose() 
+	{
+		batch.dispose();
+		font.dispose();
 	}
 
 }
