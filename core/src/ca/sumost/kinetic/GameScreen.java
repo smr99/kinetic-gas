@@ -45,8 +45,7 @@ public class GameScreen implements Screen
 			@Override
 			public Vector2 pointToWorld(float xScreen, float yScreen) 
 			{
-				Vector2 point = new Vector2(xScreen, yScreen);
-				return mViewport.unproject(point);
+				return mViewport.unproject(new Vector2(xScreen, yScreen));
 			}
 
 			@Override
