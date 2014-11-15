@@ -31,8 +31,6 @@ public class GameScreen implements Screen
 	private final ShapeRenderer mShapeRenderer = new ShapeRenderer();
 	private final WorldEditorListener mEditorListener;
 	
-	private boolean mIsActive = false;
-	
 	public GameScreen(final KineticTheoryGame g)
 	{
 		game = g;
@@ -81,13 +79,12 @@ public class GameScreen implements Screen
 		
 		InputMultiplexer im = new InputMultiplexer(zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
+		Gdx.graphics.setContinuousRendering(true);
 	}
 	
 	@Override
 	public void render(float delta) 
 	{
-        if (!mIsActive) return;
-		
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -140,25 +137,25 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
-		mIsActive = true;
+		Gdx.graphics.setContinuousRendering(true);
 	}
 
 	@Override
 	public void hide() 
 	{
-		mIsActive = false;
+		Gdx.graphics.setContinuousRendering(false);
 	}
 
 	@Override
 	public void pause() 
 	{
-		mIsActive = false;
+		Gdx.graphics.setContinuousRendering(false);
 	}
 
 	@Override
 	public void resume()
 	{
-		mIsActive = true;
+		Gdx.graphics.setContinuousRendering(true);
 	}
 
 	@Override
