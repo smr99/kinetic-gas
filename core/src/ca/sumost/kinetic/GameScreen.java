@@ -77,7 +77,7 @@ public class GameScreen implements Screen
 			}
 		};
 		
-		mEditorListener = new WorldEditorListener(g.world, sc);
+		mEditorListener = new WorldEditorListener(g.getWorld(), sc);
 		
 		InputMultiplexer im = new InputMultiplexer(zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
@@ -102,13 +102,13 @@ public class GameScreen implements Screen
 		}
         mShapeRenderer.end();
 
-        game.world.step(1/60f, 6, 2);
+        game.getWorld().step(1/60f, 6, 2);
 	}
 
 	private void renderWorld() 
 	{
 		Array<Body> bodies = new Array<Body>();
-        game.world.getBodies(bodies);
+        game.getWorld().getBodies(bodies);
         for (Body body : bodies)
         {
         	Object ud = body.getUserData();

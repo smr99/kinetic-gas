@@ -43,8 +43,8 @@ public class GasScreen implements Screen
 	{
 		game = g;
 		mShapeRenderer = new ShapeRenderer();
-		mGas = new Gas(game.world);
-		mWalls = new WallGroup(game.world);
+		mGas = new Gas(game.getWorld());
+		mWalls = new WallGroup(game.getWorld());
 		
 		camera.setToOrtho(false, WIDTH, HEIGHT);
 		
@@ -55,7 +55,7 @@ public class GasScreen implements Screen
 		mWalls.addBoxCorners(0, wallWidth, wallWidth, HEIGHT-wallWidth);
 		mWalls.addBoxCorners(WIDTH, wallWidth, WIDTH-wallWidth, HEIGHT-wallWidth);
 
-		shutter = Wall.MakeBox(game.world, WIDTH/2f, HEIGHT/2f, wallWidth/2f, 0.2f*HEIGHT);
+		shutter = Wall.MakeBox(game.getWorld(), WIDTH/2f, HEIGHT/2f, wallWidth/2f, 0.2f*HEIGHT);
 		shutter.setActive(false);
 		shutterCentre.set(WIDTH/2f, HEIGHT/2f, 0);
 		
@@ -139,7 +139,7 @@ public class GasScreen implements Screen
 		}
 		game.batch.end();
         
-		game.world.step(1/60f, 6, 2);
+		game.getWorld().step(1/60f, 6, 2);
 	}
 
 	@Override

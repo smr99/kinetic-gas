@@ -21,7 +21,7 @@ public class KineticTheoryGame extends Game
 	public SpriteBatch batch;//@deprecated
 	public BitmapFont font;//@deprecated
 	
-	public final World world = new World(new Vector2(0, 0), true);
+	private final World mWorld = new World(new Vector2(0, 0), true);
 	private Skin mSkin;
 	
 	@Override
@@ -57,6 +57,11 @@ public class KineticTheoryGame extends Game
 	public final Skin getSkin() 
 	{
 		return mSkin;
+	}
+
+	public final World getWorld() 
+	{
+		return mWorld;
 	}
 	
 }
