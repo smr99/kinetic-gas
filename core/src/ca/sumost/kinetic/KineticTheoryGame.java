@@ -12,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class KineticTheoryGame extends Game
 {
-	static public final int VIEWPORT_WIDTH = 2560/2;
-	static public final int VIEWPORT_HEIGHT = 1600/2;
-
 	private final World mWorld = new World(new Vector2(0, 0), true);
 	private Skin mSkin;
 	

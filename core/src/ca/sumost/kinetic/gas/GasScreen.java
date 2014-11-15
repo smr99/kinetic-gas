@@ -141,11 +141,14 @@ public class GasScreen implements Screen
 		batch.begin();
 		if (mGas.speedStats.count > 0)
 		{
+			float msgX = camera.viewportWidth - 100;
+			float msgY = camera.viewportHeight - 20;
+
 			CharSequence msg = String.format("T = %.1f", gasPartitionTemperatures.x);
-			font.draw(batch, msg, 20, KineticTheoryGame.VIEWPORT_HEIGHT-20);
+			font.draw(batch, msg, 20, msgY);
 			
-			msg = String.format("T = %.1f", gasPartitionTemperatures.y);
-			font.draw(batch, msg, KineticTheoryGame.VIEWPORT_WIDTH-100, KineticTheoryGame.VIEWPORT_HEIGHT-20);
+			msg = String.format("T = %.1f", gasPartitionTemperatures.y);			
+			font.draw(batch, msg, msgX, msgY);
 		}
 		batch.end();
         
