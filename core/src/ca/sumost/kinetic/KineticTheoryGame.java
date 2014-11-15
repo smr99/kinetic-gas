@@ -31,6 +31,9 @@ public class KineticTheoryGame extends Game
 	//@Override
 	public void dispose() 
 	{
+		mWorld.dispose();
+		mSkin.dispose();
+		super.dispose();
 	}
 
 	private static Skin makeSkin() 
