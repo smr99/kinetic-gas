@@ -36,7 +36,7 @@ public class WorldEditor
 		@Override
 		public void render(ShapeRenderer sr, Body body) 
 		{
-			sr.setColor(Color.DARK_GRAY);
+			sr.setColor(Color.GRAY);
 			
 			Shape shape = body.getFixtureList().get(0).getShape();
 			ChainShape chain = (ChainShape)shape;
