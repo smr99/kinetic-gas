@@ -9,7 +9,4 @@ public interface ScreenConverter
 
 	//@ Convert vector from screen coordinates to world coordinates
 	Vector2 vectorToWorld(float xScreen, float yScreen);
-	
-	//@ Set world-to-screen zoom factor.  Default start value is 1.
-	void setZoom(float zoomFactor);
 }

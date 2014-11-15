@@ -5,7 +5,7 @@ import ca.sumost.kinetic.ScreenConverter;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Array;
  *     - double tap : create ball, change to Start
  *     - pan (drag) : create ground, change to Start
  */
-public class WorldEditorListener implements GestureListener, RenderableDecoration
+public class WorldEditorListener extends GestureAdapter implements RenderableDecoration
 {
 	private final World mWorld;
 	private final WorldEditor mEditor;
@@ -162,21 +162,6 @@ public class WorldEditorListener implements GestureListener, RenderableDecoratio
 			return true;
 		}
 		
-		return false;
-	}
-
-	@Override
-	public boolean zoom(float initialDistance, float distance) 
-	{
-		//Gdx.app.log("zoom", "zoom() called with initialDistance = " + initialDistance + ", distance = " + distance);
-		mScreenConverter.setZoom(initialDistance / distance);
-		return false;
-	}
-
-	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2)
-	{
-		//Gdx.app.log("zoom", "pinch() called with vectors: " + initialPointer1 + ", " + initialPointer2 + ", " + pointer1 + ", " + pointer2);
 		return false;
 	}
 

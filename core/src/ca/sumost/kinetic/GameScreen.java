@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -52,34 +54,33 @@ public class GameScreen implements Screen
 			{
 				return pointToWorld(xScreen, yScreen).sub(pointToWorld(0, 0));			
 			}
-
-			@Override
-			public void setZoom(float zoomFactor)
-			{
-				mViewport.setUnitsPerPixel(zoomFactor/20f);
-				mViewport.update(mViewport.getScreenWidth(), mViewport.getScreenHeight());
-			}
 		};
 		
-		mEditorListener = new WorldEditorListener(g.world, sc);
-		
-		InputProcessor blah = new InputAdapter()
+		InputProcessor zoomByScroll = new InputAdapter()
 		{
 			@Override
 			public boolean scrolled(int amount) 
 			{
 				float zoomChangeFactor = 0.90f;
 				float zoomChange = (amount > 0) ? zoomChangeFactor : 1.0f / zoomChangeFactor;
-				mZoomFactor *= zoomChange;
-				sc.setZoom(mZoomFactor);
+				setZoom(mZoomFactor * zoomChange);
 				return true;
 			}
 		};
 		
-		InputMultiplexer im = new InputMultiplexer();
-		im.addProcessor(new GestureDetector(mEditorListener));
-		im.addProcessor(blah);
+		GestureListener zoomByPinch = new GestureAdapter()
+		{
+			@Override
+			public boolean zoom(float initialDistance, float distance) 
+			{
+				setZoom(initialDistance / distance);
+				return true;
+			}
+		};
 		
+		mEditorListener = new WorldEditorListener(g.world, sc);
+		
+		InputMultiplexer im = new InputMultiplexer(zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
 	}
 	
@@ -122,6 +123,13 @@ public class GameScreen implements Screen
 	private void renderDecorations() 
 	{
 		mEditorListener.render(mShapeRenderer);
+	}
+
+	private void setZoom(float zoomFactor)
+	{
+		mZoomFactor = zoomFactor;
+		mViewport.setUnitsPerPixel(zoomFactor/20f);
+		mViewport.update(mViewport.getScreenWidth(), mViewport.getScreenHeight());
 	}
 
 	@Override
