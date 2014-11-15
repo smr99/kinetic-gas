@@ -58,7 +58,7 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 		return mDragPoints.size > 0;
 	}
 	
-	public void EnterStartState()
+	private void EnterStartState()
 	{
 		mPointDown = null;
 		mSelectedBody = null;

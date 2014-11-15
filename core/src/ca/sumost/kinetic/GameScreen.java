@@ -11,11 +11,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -24,6 +30,8 @@ public class GameScreen implements Screen
 	private final KineticTheoryGame game;
 	private final ScreenViewport mViewport;
 
+	private final Stage mStage;
+	
 	private float mZoomFactor = 1;
 
 	@SuppressWarnings("unused")
@@ -37,6 +45,9 @@ public class GameScreen implements Screen
 		
 		mViewport = new ScreenViewport();
 		mViewport.setUnitsPerPixel(1f/20f);
+		
+		mStage = new Stage();
+		mStage.addActor(makeRootWidget());
 		
 		final ScreenConverter sc = new ScreenConverter()
 		{
@@ -77,11 +88,27 @@ public class GameScreen implements Screen
 		
 		mEditorListener = new WorldEditorListener(g.getWorld(), sc);
 		
-		InputMultiplexer im = new InputMultiplexer(zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
+		InputMultiplexer im = new InputMultiplexer(mStage, zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
 		Gdx.graphics.setContinuousRendering(true);
 	}
 	
+	private Actor makeRootWidget()
+	{
+		Skin skin = game.getSkin();
+	
+		VerticalGroup rightButtonBar = new VerticalGroup();
+		rightButtonBar.addActor(new TextButton("Button A", skin));
+		rightButtonBar.addActor(new TextButton("Button B", skin));
+		rightButtonBar.addActor(new TextButton("Button C", skin));
+		
+	    Container<VerticalGroup> root = new Container<VerticalGroup>(rightButtonBar).top().right();
+	    root.setFillParent(true);
+	    //root.setDebug(true);
+	    
+		return root;
+	}
+
 	@Override
 	public void render(float delta) 
 	{
@@ -98,6 +125,9 @@ public class GameScreen implements Screen
 			renderDecorations();
 		}
         mShapeRenderer.end();
+        
+		mStage.act(delta);
+		mStage.draw();
 
         game.getWorld().step(1/60f, 6, 2);
 	}
@@ -132,6 +162,7 @@ public class GameScreen implements Screen
 	public void resize(int width, int height) 
 	{
 		mViewport.update(width, height);
+		mStage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -162,6 +193,7 @@ public class GameScreen implements Screen
 	public void dispose()
 	{
 		mShapeRenderer.dispose();
+		mStage.dispose();
 	}
 
 }
