@@ -8,24 +8,20 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameScreen implements Screen
 {
 	private final KineticTheoryGame game;
-	private final OrthographicCamera camera = new OrthographicCamera();
+	private final ScreenViewport mViewport;
 
-	//@ World-unit length assigned to smaller edge of screen is this value multiplied by the zoom factor.
-	private static final float mSmallEdgeLength = 50;
-	
 	private float mZoomFactor = 1;
 
 	@SuppressWarnings("unused")
@@ -39,15 +35,16 @@ public class GameScreen implements Screen
 	{
 		game = g;
 		
+		mViewport = new ScreenViewport();
+		mViewport.setUnitsPerPixel(1f/20f);
+		
 		final ScreenConverter sc = new ScreenConverter()
 		{
 			@Override
 			public Vector2 pointToWorld(float xScreen, float yScreen) 
 			{
-				Vector3 point = new Vector3();
-				point.set(xScreen, yScreen, 0);
-	        	camera.unproject(point);
-	        	return new Vector2(point.x, point.y);
+				Vector2 point = new Vector2(xScreen, yScreen);
+				return mViewport.unproject(point);
 			}
 
 			@Override
@@ -59,12 +56,11 @@ public class GameScreen implements Screen
 			@Override
 			public void setZoom(float zoomFactor)
 			{
-				mZoomFactor = zoomFactor;
-				setCameraViewport();
+				mViewport.setUnitsPerPixel(zoomFactor/20f);
+				mViewport.update(mViewport.getScreenWidth(), mViewport.getScreenHeight());
 			}
 		};
 		
-		setCameraViewport();
 		mEditorListener = new WorldEditorListener(g.world, sc);
 		
 		InputProcessor blah = new InputAdapter()
@@ -74,7 +70,8 @@ public class GameScreen implements Screen
 			{
 				float zoomChangeFactor = 0.90f;
 				float zoomChange = (amount > 0) ? zoomChangeFactor : 1.0f / zoomChangeFactor;
-				sc.setZoom(mZoomFactor * zoomChange);
+				mZoomFactor *= zoomChange;
+				sc.setZoom(mZoomFactor);
 				return true;
 			}
 		};
@@ -86,20 +83,6 @@ public class GameScreen implements Screen
 		Gdx.input.setInputProcessor(im);
 	}
 	
-	private void setCameraViewport()
-	{
-		float smallEdgeLength = mSmallEdgeLength * mZoomFactor;
-		float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-		if (aspectRatio < 1)
-		{
-			camera.setToOrtho(false, smallEdgeLength, smallEdgeLength / aspectRatio);
-		}
-		else
-		{
-			camera.setToOrtho(false, smallEdgeLength * aspectRatio, smallEdgeLength);
-		}
-	}
-
 	@Override
 	public void render(float delta) 
 	{
@@ -108,8 +91,8 @@ public class GameScreen implements Screen
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();        
-        mShapeRenderer.setProjectionMatrix(camera.combined);
+        mViewport.getCamera().update();        
+        mShapeRenderer.setProjectionMatrix(mViewport.getCamera().combined);
         
 		mShapeRenderer.begin(ShapeType.Line);
 		{
@@ -144,7 +127,7 @@ public class GameScreen implements Screen
 	@Override
 	public void resize(int width, int height) 
 	{
-		setCameraViewport();
+		mViewport.update(width, height);
 	}
 
 	@Override
