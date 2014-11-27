@@ -3,6 +3,7 @@ package ca.sumost.kinetic.editor;
 import ca.sumost.kinetic.RenderableDecoration;
 import ca.sumost.kinetic.ScreenConverter;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
@@ -82,6 +83,8 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) 
 	{
+		Gdx.app.log("Editor", "touchDown");
+		
 		mPointDown = mScreenConverter.pointToWorld(x, y);
 		Body selectedBody = mEditor.queryPoint(mPointDown);
 		if (selectedBody == null)
@@ -94,6 +97,8 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean tap(float x, float y, int count, int button) 
 	{		
+		Gdx.app.log("Editor", "tap");
+		
 		if (count == 2 && IsCreatingBody())
 		{
 			mEditor.makeBall(mScreenConverter.pointToWorld(x, y));
@@ -107,6 +112,8 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean longPress(float x, float y) 
 	{		
+		Gdx.app.log("Editor", "longPress");
+		
 		if (IsEditingBody())
 		{
 			mWorld.destroyBody(mSelectedBody);
@@ -120,6 +127,8 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) 
 	{		
+		Gdx.app.log("Editor", "fling");
+		
 		if (IsEditingBody())
 		{
 			Vector2 impulse = mScreenConverter.vectorToWorld(velocityX, velocityY).scl(mSelectedBody.getMass());
