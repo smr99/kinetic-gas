@@ -41,6 +41,12 @@ public class KineticTheoryGame extends Game
 		FileHandle skinFile = Gdx.files.internal("data/uiskin.json");
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
 		Skin skin = new Skin(skinFile, atlas);
+
+		Gdx.app.log("Startup", "Graphics Density: " + Gdx.graphics.getDensity());
+		
+		float fontScale = 2f * Gdx.graphics.getDensity();
+		skin.getFont("default-font").setScale(fontScale);
+		
 		return skin;
 	}
 
