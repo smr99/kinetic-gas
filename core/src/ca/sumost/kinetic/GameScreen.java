@@ -1,6 +1,7 @@
 package ca.sumost.kinetic;
 
 import ca.sumost.kinetic.editor.BoundaryCreator;
+import ca.sumost.kinetic.editor.GreenAtomCreator;
 import ca.sumost.kinetic.editor.RedAtomCreator;
 import ca.sumost.kinetic.editor.WorldEditorListener;
 
@@ -106,8 +107,17 @@ public class GameScreen implements Screen
 			@Override
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				mEditorListener.setCreator(new RedAtomCreator(game.getWorld()));
-				
+				mEditorListener.setCreator(new RedAtomCreator(game.getWorld()));				
+			}
+		});
+		
+		TextButton greenAtomButton = new TextButton("GREEN atom", skin);
+		greenAtomButton.addListener(new ChangeListener()
+		{
+			@Override
+			public void changed(ChangeEvent event, Actor actor)
+			{
+				mEditorListener.setCreator(new GreenAtomCreator(game.getWorld()));				
 			}
 		});
 		
@@ -117,13 +127,13 @@ public class GameScreen implements Screen
 			@Override
 			public void changed(ChangeEvent event, Actor actor)
 			{
-				mEditorListener.setCreator(new BoundaryCreator(game.getWorld()));
-				
+				mEditorListener.setCreator(new BoundaryCreator(game.getWorld()));				
 			}
 		});
 		
 		VerticalGroup rightButtonBar = new VerticalGroup();
 		rightButtonBar.addActor(redAtomButton);
+		rightButtonBar.addActor(greenAtomButton);
 		rightButtonBar.addActor(boundaryButton);
 		
 	    Container<VerticalGroup> root = new Container<VerticalGroup>(rightButtonBar).top().right();
