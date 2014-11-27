@@ -21,9 +21,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
@@ -101,8 +103,8 @@ public class GameScreen implements Screen
 	{
 		Skin skin = game.getSkin();
 
-		TextButton redAtomButton = new TextButton("RED atom", skin);
-		redAtomButton.addListener(new ChangeListener()
+		Button redAtomButton = new CheckBox("RED atom", skin);
+		redAtomButton.center().addListener(new ChangeListener()
 		{
 			@Override
 			public void changed(ChangeEvent event, Actor actor)
@@ -111,8 +113,8 @@ public class GameScreen implements Screen
 			}
 		});
 		
-		TextButton greenAtomButton = new TextButton("GREEN atom", skin);
-		greenAtomButton.addListener(new ChangeListener()
+		Button greenAtomButton = new CheckBox("GREEN atom", skin);
+		greenAtomButton.center().addListener(new ChangeListener()
 		{
 			@Override
 			public void changed(ChangeEvent event, Actor actor)
@@ -121,8 +123,8 @@ public class GameScreen implements Screen
 			}
 		});
 		
-		TextButton boundaryButton = new TextButton("Boundary", skin);
-		boundaryButton.addListener(new ChangeListener()
+		Button boundaryButton = new CheckBox("Boundary", skin);
+		boundaryButton.center().addListener(new ChangeListener()
 		{
 			@Override
 			public void changed(ChangeEvent event, Actor actor)
@@ -130,11 +132,13 @@ public class GameScreen implements Screen
 				mEditorListener.setCreator(new BoundaryCreator(game.getWorld()));				
 			}
 		});
-		
+
 		VerticalGroup rightButtonBar = new VerticalGroup();
 		rightButtonBar.addActor(redAtomButton);
 		rightButtonBar.addActor(greenAtomButton);
 		rightButtonBar.addActor(boundaryButton);
+		
+		ButtonGroup group = new ButtonGroup(redAtomButton, greenAtomButton, boundaryButton);
 		
 	    Container<VerticalGroup> root = new Container<VerticalGroup>(rightButtonBar).top().right();
 	    root.setFillParent(true);
