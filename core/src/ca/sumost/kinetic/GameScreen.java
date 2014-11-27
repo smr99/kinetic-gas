@@ -1,5 +1,6 @@
 package ca.sumost.kinetic;
 
+import ca.sumost.kinetic.editor.RedAtomCreator;
 import ca.sumost.kinetic.editor.WorldEditorListener;
 
 import com.badlogic.gdx.Gdx;
@@ -91,6 +92,8 @@ public class GameScreen implements Screen
 		InputMultiplexer im = new InputMultiplexer(mStage, zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
 		Gdx.graphics.setContinuousRendering(true);
+		
+		mEditorListener.setCreator(new RedAtomCreator(g.getWorld()));
 	}
 	
 	private Actor makeRootWidget()
