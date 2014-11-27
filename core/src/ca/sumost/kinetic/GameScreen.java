@@ -1,5 +1,6 @@
 package ca.sumost.kinetic;
 
+import ca.sumost.kinetic.editor.BoundaryCreator;
 import ca.sumost.kinetic.editor.RedAtomCreator;
 import ca.sumost.kinetic.editor.WorldEditorListener;
 
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -92,18 +94,37 @@ public class GameScreen implements Screen
 		InputMultiplexer im = new InputMultiplexer(mStage, zoomByScroll, new GestureDetector(zoomByPinch), new GestureDetector(mEditorListener));
 		Gdx.input.setInputProcessor(im);
 		Gdx.graphics.setContinuousRendering(true);
-		
-		mEditorListener.setCreator(new RedAtomCreator(g.getWorld()));
 	}
 	
 	private Actor makeRootWidget()
 	{
 		Skin skin = game.getSkin();
-	
+
+		TextButton redAtomButton = new TextButton("RED atom", skin);
+		redAtomButton.addListener(new ChangeListener()
+		{
+			@Override
+			public void changed(ChangeEvent event, Actor actor)
+			{
+				mEditorListener.setCreator(new RedAtomCreator(game.getWorld()));
+				
+			}
+		});
+		
+		TextButton boundaryButton = new TextButton("Boundary", skin);
+		boundaryButton.addListener(new ChangeListener()
+		{
+			@Override
+			public void changed(ChangeEvent event, Actor actor)
+			{
+				mEditorListener.setCreator(new BoundaryCreator(game.getWorld()));
+				
+			}
+		});
+		
 		VerticalGroup rightButtonBar = new VerticalGroup();
-		rightButtonBar.addActor(new TextButton("Button A", skin));
-		rightButtonBar.addActor(new TextButton("Button B", skin));
-		rightButtonBar.addActor(new TextButton("Button C", skin));
+		rightButtonBar.addActor(redAtomButton);
+		rightButtonBar.addActor(boundaryButton);
 		
 	    Container<VerticalGroup> root = new Container<VerticalGroup>(rightButtonBar).top().right();
 	    root.setFillParent(true);
