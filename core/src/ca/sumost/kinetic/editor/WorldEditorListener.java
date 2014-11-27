@@ -3,7 +3,6 @@ package ca.sumost.kinetic.editor;
 import ca.sumost.kinetic.RenderableDecoration;
 import ca.sumost.kinetic.ScreenConverter;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.math.Vector2;
@@ -37,8 +36,6 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	
 	public WorldEditorListener(World world, ScreenConverter sc)
 	{
-		Gdx.app.log("Editor", "construct WorldEditorListener");
-	
 		mWorld = world;
 		mEditor = new WorldEditor(world);
 		mScreenConverter = sc;
@@ -57,11 +54,8 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) 
 	{
-		Gdx.app.log("Editor", "touchDown");
-		
 		mPointDown = mScreenConverter.pointToWorld(x, y);
 		mSelectedBody = mEditor.queryPoint(mPointDown);
-		Gdx.app.log("Editor", "touchDown, selected:" + mSelectedBody);
 
 		if (IsEditingBody())
 			return true;
@@ -72,8 +66,6 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean tap(float x, float y, int count, int button) 
 	{
-		Gdx.app.log("Editor", "tap count:" + count);
-
 		if (IsEditingBody())
 		{
 			if (count == 2)
@@ -90,9 +82,7 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 
 	@Override
 	public boolean longPress(float x, float y) 
-	{	
-		Gdx.app.log("Editor", "longPress");
-
+	{
 		if (IsEditingBody())
 		{
 			return true;
@@ -104,8 +94,6 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) 
 	{		
-		Gdx.app.log("Editor", "fling selected body: " + mSelectedBody);
-
 		if (IsEditingBody())
 		{
 			Vector2 impulse = mScreenConverter.vectorToWorld(velocityX, velocityY).scl(mSelectedBody.getMass());
@@ -130,8 +118,6 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	@Override
 	public boolean panStop(float x, float y, int pointer, int button) 
 	{
-		Gdx.app.log("Editor", "pan stop, selected body: " + mSelectedBody);
-		
 		if (IsEditingBody())
 		{
 			return true;
