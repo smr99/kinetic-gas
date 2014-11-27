@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -26,7 +28,6 @@ import com.badlogic.gdx.physics.box2d.World;
 public class WorldEditorListener extends GestureAdapter implements RenderableDecoration
 {
 	private final World mWorld;
-	private final WorldEditor mEditor;
 	private final ScreenConverter mScreenConverter;
 	
 	private Vector2 mPointDown = null;
@@ -37,7 +38,6 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 	public WorldEditorListener(World world, ScreenConverter sc)
 	{
 		mWorld = world;
-		mEditor = new WorldEditor(world);
 		mScreenConverter = sc;
 	}
 	
@@ -51,11 +51,36 @@ public class WorldEditorListener extends GestureAdapter implements RenderableDec
 		return mSelectedBody != null;
 	}
 	
+	/**
+	 * @param point in world frame
+	 * @return body within 0.10 of the point; if multiple bodies hit, arbitrary one returned
+	 */
+	private Body queryPoint(Vector2 point)
+	{
+		final float hitHalfWidth = 0.10f;
+
+		final Body b[] = new Body[1];
+		b[0] = null;
+
+		QueryCallback callback = new QueryCallback()
+		{
+			@Override
+			public boolean reportFixture(Fixture fixture)
+			{
+				b[0] = fixture.getBody();
+				return b[0] != null;
+			}
+		};
+		mWorld.QueryAABB(callback, point.x - hitHalfWidth, point.y - hitHalfWidth, point.x + hitHalfWidth, point.y + hitHalfWidth);
+		return b[0];
+	}
+
+	
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) 
 	{
 		mPointDown = mScreenConverter.pointToWorld(x, y);
-		mSelectedBody = mEditor.queryPoint(mPointDown);
+		mSelectedBody = queryPoint(mPointDown);
 
 		if (IsEditingBody())
 			return true;
